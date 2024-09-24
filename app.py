@@ -67,14 +67,16 @@ if uploaded_file:
             st.write("Updated DataFrame with the 'result' and 'status' columns:")
             st.dataframe(df)
             
-            # Step 6: Create and display pie chart
+            # Step 6: Create and display pie chart using pandas
             st.write("Status Distribution Pie Chart:")
             if 'status' in df.columns and not df['status'].empty:
                 status_counts = df['status'].value_counts()
-                fig, ax = plt.subplots()
-                ax.pie(status_counts, labels=status_counts.index, autopct='%1.1f%%', startangle=90)
-                ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-                st.pyplot(fig)
+                st.write("Status Counts:")
+                st.write(status_counts)
+                
+                # Plot pie chart using pandas
+                pie_chart = status_counts.plot.pie(autopct='%1.1f%%', startangle=90, figsize=(6, 6))
+                st.pyplot(pie_chart.get_figure())
             else:
                 st.write("No data to display in pie chart.")
             
