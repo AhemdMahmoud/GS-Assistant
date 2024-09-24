@@ -69,11 +69,14 @@ if uploaded_file:
             
             # Step 6: Create and display pie chart
             st.write("Status Distribution Pie Chart:")
-            status_counts = df['status'].value_counts()
-            fig, ax = plt.subplots()
-            ax.pie(status_counts, labels=status_counts.index, autopct='%1.1f%%', startangle=90)
-            ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-            st.pyplot(fig)
+            if 'status' in df.columns and not df['status'].empty:
+                status_counts = df['status'].value_counts()
+                fig, ax = plt.subplots()
+                ax.pie(status_counts, labels=status_counts.index, autopct='%1.1f%%', startangle=90)
+                ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+                st.pyplot(fig)
+            else:
+                st.write("No data to display in pie chart.")
             
             # Step 7: Option to download the updated Excel sheet
             def convert_df_to_excel(df):
