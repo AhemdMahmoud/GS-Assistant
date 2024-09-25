@@ -1,10 +1,11 @@
 import streamlit as st
 import pandas as pd
+import matplotlib.pyplot as plt
 from io import BytesIO
 import re
 
 # Title of the App
-st.title("Supply Chain Inventory Management")
+st.title("Supply Chain  Stocks Inventory ")
 
 # Step 1: Upload Excel file
 uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
@@ -16,7 +17,8 @@ if uploaded_file:
     
     # Display the first few rows of the dataframe
     st.write("Here's the data from your file:")
-    st.dataframe(df)
+    input = st.number_input("Enter the number of rows you want to display", value=5)
+    st.write(df.head(input))
 
     # Get the columns from the uploaded file
     columns = df.columns.tolist()
@@ -53,12 +55,45 @@ if uploaded_file:
             
             # Determine status based on the conditions
             def assign_status(value):
-                if value >= conditions["BOM"]:
+                if value >= conditions["BOM"] and  conditions["BOM"] >conditions["BAM"] and conditions["BOM"]>conditions["BEM"] :
                     return "BOM"
-                elif value >= conditions["BAM"]:
+                elif value >= conditions["BAM"] and conditions["BAM"]>conditions["BEM"] :
                     return "BAM"
-                else:
+                elif value >= conditions["BEM"] and conditions["BEM"]>conditions["BAM"] and conditions["BEM"]>conditions["BOM"]:
                     return "BEM"
+                elif value < conditions["BEM"] and conditions["BEM"]<conditions["BAM"] and conditions["BEM"]<conditions["BOM"]:
+                    return "uncompleate"
+                elif value >= conditions["BAM"] and value<conditions["BOM"] and value <conditions["BOM"] and conditions["BOM"]<conditions["BAM"]:
+                    return "BAM"
+                # elif value >= conditions["BEM"] and value<conditions["BAM"] and value <conditions["BOM"] and conditions["BOM"]<conditions["BAM"]:
+                #     return "BAM"
+                elif value >= conditions["BEM"] :
+                    return "BEM"
+                elif value >= conditions["BAM"] :
+                    return "BAM"
+                elif value >= conditions["BOM"] :
+                    return "BOM"
+
+                elif value < 0:
+                    return "Negative"
+                elif value == 0:
+                    return "Zero"
+                elif value == None:
+                    return "None"
+                elif value == "":
+                    return "Empty"
+                elif value == " ":
+                    return "Space"
+                elif value == "NaN":
+                    return "NaN"
+                elif value == "nan":
+                    return "nan"
+                elif value == "NAN":
+                    return "NAN"
+                elif value == "None":
+                    return "None"
+                elif value == "none":
+                    return "none"
 
             df['status'] = df['result'].apply(assign_status)
             
